@@ -1,5 +1,7 @@
 # Paper Zh Layout Reader
 
+[中文说明](README.zh-CN.md) | English
+
 `paper-zh-layout-reader` is a Codex skill for converting English academic paper PDFs into Chinese reading artifacts.
 
 It is designed around a practical workflow: read one paper, preserve source traceability, extract figures/tables, rebuild important equations in a MathType-compatible format, and produce both a bilingual Markdown reader and a Chinese same-layout HTML/PDF version.
