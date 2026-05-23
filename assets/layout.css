@@ -1,0 +1,38 @@
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #d8d8d8; color: #111; }
+.sheet {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 8mm;
+  padding: 18mm 13mm 17mm;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  font-family: "Times New Roman", "SimSun", "Noto Serif CJK SC", serif;
+}
+.columns { display: grid; grid-template-columns: 1fr 1fr; column-gap: 7mm; }
+h1 { font-size: 18pt; line-height: 1.1; text-align: center; margin: 0 0 4mm; }
+h2 { font-size: 10.5pt; line-height: 1.15; text-align: center; margin: 7pt 0 5pt; }
+h3 { font-size: 9.5pt; line-height: 1.15; margin: 5pt 0 3pt; font-style: italic; }
+p, .abstract, .keywords {
+  font-size: 9.6pt;
+  line-height: 1.25;
+  margin: 0 0 3.8pt;
+  text-align: justify;
+  text-indent: 1.65em;
+}
+.abstract, .keywords { text-indent: 0; }
+.fig { margin: 0 auto 5pt; text-align: center; break-inside: avoid; }
+.fig img { display: block; max-width: 100%; margin: 0 auto 2pt; }
+figcaption { font-size: 8.4pt; line-height: 1.12; text-align: justify; }
+.formula { margin: 4pt auto 6pt; text-align: center; font-size: 9.6pt; }
+table { border-collapse: collapse; width: 100%; font-size: 7pt; line-height: 1.12; }
+th, td { border: 0.55pt solid #222; padding: 2.4pt 2.2pt; text-align: center; vertical-align: middle; }
+.page-no { position: absolute; right: 13mm; bottom: 10.5mm; font-size: 11pt; }
+.license { position: absolute; left: 24mm; right: 24mm; bottom: 8.6mm; text-align: center; font-size: 6.5pt; }
+@media print {
+  body { background: #fff; }
+  .sheet { margin: 0; page-break-after: always; }
+  .sheet.last { page-break-after: auto; }
+}

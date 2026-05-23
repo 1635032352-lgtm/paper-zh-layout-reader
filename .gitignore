@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+_probe*/
+_validation_previews/
+*-reader/
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
