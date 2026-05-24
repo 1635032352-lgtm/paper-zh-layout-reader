@@ -22,15 +22,19 @@ def load_pdfium(extra_path: str | None):
 def main() -> None:
     parser = argparse.ArgumentParser(description="Validate generated paper Chinese reader artifacts.")
     parser.add_argument("--root", required=True, help="Reader output directory")
-    parser.add_argument("--html", default="paper_zh_layout.html")
-    parser.add_argument("--pdf", default="paper_zh_layout.pdf")
+    parser.add_argument("--html", default=None, help="HTML file to validate; defaults to paper_zh_final_layout.html when present, otherwise paper_zh_layout.html")
+    parser.add_argument("--pdf", default=None, help="PDF file to validate; defaults to paper_zh_final_layout.pdf when present, otherwise paper_zh_layout.pdf")
     parser.add_argument("--render-previews", action="store_true")
     parser.add_argument("--pypdfium2-path", default=None)
     args = parser.parse_args()
 
     root = Path(args.root)
-    html_path = root / args.html
-    pdf_path = root / args.pdf
+    final_layout_html_path = root / "paper_zh_final_layout.html"
+    final_layout_pdf_path = root / "paper_zh_final_layout.pdf"
+    html_name = args.html or ("paper_zh_final_layout.html" if final_layout_html_path.exists() else "paper_zh_layout.html")
+    pdf_name = args.pdf or ("paper_zh_final_layout.pdf" if final_layout_pdf_path.exists() else "paper_zh_layout.pdf")
+    html_path = root / html_name
+    pdf_path = root / pdf_name
     chinese_full_html_path = root / "paper_zh_full.html"
     chinese_full_pdf_path = root / "paper_zh_full.pdf"
     source_map_path = root / "source_map.json"
@@ -49,10 +53,16 @@ def main() -> None:
 
     chinese_full_html = chinese_full_html_path.exists()
     chinese_full_pdf = chinese_full_pdf_path.exists()
+    chinese_final_layout_html = final_layout_html_path.exists()
+    chinese_final_layout_pdf = final_layout_pdf_path.exists()
+    if not chinese_final_layout_html:
+        warnings.append("missing paper_zh_final_layout.html; original-layout Chinese final paper not found")
+    if not chinese_final_layout_pdf:
+        warnings.append("missing paper_zh_final_layout.pdf; original-layout Chinese final PDF not found")
     if not chinese_full_html:
-        warnings.append("missing paper_zh_full.html; Chinese-only final paper not found")
+        warnings.append("missing paper_zh_full.html; Chinese-only linear fallback not found")
     if not chinese_full_pdf:
-        warnings.append("missing paper_zh_full.pdf; Chinese-only final PDF not found")
+        warnings.append("missing paper_zh_full.pdf; Chinese-only linear fallback PDF not found")
 
     asset_links = re.findall(r'(?:src|href)="([^"]+)"', html)
     asset_links = [link for link in asset_links if link.startswith("assets/")]
@@ -128,6 +138,10 @@ def main() -> None:
         "paper_original_pairs": original_pairs,
         "paper_chinese_pairs": chinese_pairs,
         "coverage_audit": coverage_audit_path.exists(),
+        "validated_html": html_name,
+        "validated_pdf": pdf_name,
+        "chinese_final_layout_html": chinese_final_layout_html,
+        "chinese_final_layout_pdf": chinese_final_layout_pdf,
         "chinese_full_html": chinese_full_html,
         "chinese_full_pdf": chinese_full_pdf,
         "figures": len(source_map.get("figures", [])) if isinstance(source_map, dict) else 0,

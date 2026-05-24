@@ -11,8 +11,10 @@ It is designed around a practical workflow: read one paper, preserve source trac
 For each paper, the skill aims to generate:
 
 - `paper.md` — source-grounded original/Chinese audit record
-- `paper_zh_full.html` — complete Chinese-only final paper
-- `paper_zh_full.pdf` — PDF printed from the Chinese-only final HTML
+- `paper_zh_final_layout.html` — primary Chinese-only final paper in the original paper layout
+- `paper_zh_final_layout.pdf` — primary Chinese-only final PDF printed from the original-layout HTML
+- `paper_zh_full.html` — complete Chinese-only linear fallback/supplement
+- `paper_zh_full.pdf` — PDF printed from the Chinese-only linear HTML
 - `paper_zh_layout.html` — Chinese translated layout version
 - `paper_zh_layout.pdf` — PDF printed from the layout HTML
 - `source_map.json` — stable source IDs, page numbers, figures, tables, equations, confidence notes
@@ -21,7 +23,7 @@ For each paper, the skill aims to generate:
 - `assets/` — extracted or cropped figures and tables
 - `assets/equations/*.mml` — MathML files that can be opened or reused by MathType-compatible tools
 
-If a side-by-side bilingual file is needed, it should be generated only as an audit artifact such as `paper_full_bilingual.html/pdf`. The final user-facing paper should remain Chinese-only.
+If a side-by-side bilingual file is needed, it should be generated only as an audit artifact such as `paper_full_bilingual.html/pdf`. The final user-facing paper should remain Chinese-only and should preserve the original paper layout when requested; a linear reading version is not a substitute for the layout final.
 
 ## When To Use
 
@@ -37,7 +39,7 @@ It is especially useful for:
 
 - IEEE/ACM/Nature-style academic PDFs
 - Chinese-English paper reading notes
-- Chinese translated PDF/HTML versions that follow the original page order
+- Chinese translated PDF/HTML versions that follow the original page order, columns, headers, figures/tables, and equations
 - figure/table-aware translation
 - equations that should remain editable through MathML/MathType-compatible sources
 
@@ -95,7 +97,8 @@ Before a run is marked complete, compare the source PDF with the generated Chine
 - confirm every extractable page or paragraph has a visible `Original` / `中文` pair in `paper.md` and a stable entry in `source_map.json`;
 - render the original PDF and translated PDFs/HTML, then inspect title, method/equation, figure/table, results, references, and final pages for missing text, clipping, overlap, blank pages, or formula rendering problems;
 - document the verdict, counts, layout findings, and any low-confidence content in `coverage_audit.md`;
-- keep any bilingual comparison output as audit-only, and provide `paper_zh_full.html/pdf` as the Chinese-only final reading version.
+- keep any bilingual comparison output as audit-only, and provide `paper_zh_final_layout.html/pdf` as the Chinese-only original-layout final reading version.
+- if only `paper_zh_full.html/pdf` can be generated, mark the original-layout output as missing or low-confidence in `coverage_audit.md` and `translation_notes.md`; do not present the linear version as the final same-layout paper.
 
 ## Notes On Equations
 

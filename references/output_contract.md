@@ -5,6 +5,8 @@
 ```text
 <paper-slug>-reader/
 ├── paper.md
+├── paper_zh_final_layout.html   # primary Chinese-only final paper, original-layout
+├── paper_zh_final_layout.pdf    # primary Chinese-only final PDF, original-layout
 ├── paper_zh_full.html
 ├── paper_zh_full.pdf
 ├── paper_zh_layout.html
@@ -95,6 +97,8 @@ Record:
 - whether the PDF is final or draft
 - validation results
 - which artifact is the final Chinese-only reading version
+  - Normally this should be `paper_zh_final_layout.html/pdf`.
+  - `paper_zh_full.html/pdf` is a linear fallback/supplement and should not be presented as the original-layout final paper.
 
 ## `coverage_audit.md`
 
@@ -113,10 +117,12 @@ Record the final source-to-output review:
 ## Validation Checklist
 
 - `paper.md` contains visible `**Original:**` and `**中文:**` pairs unless the user asked only for Chinese layout.
-- `paper_zh_full.html/pdf` exists for Chinese-only final reading when the user asks for a Chinese paper.
+- `paper_zh_final_layout.html/pdf` exists for Chinese-only final reading when the user asks for a Chinese paper in the original paper layout.
+- `paper_zh_final_layout.html/pdf` visually preserves the source paper's main page structure: page headers/footers when useful, columns, title block, section order, figures/tables near discussion, and equations near the relevant text.
+- `paper_zh_full.html/pdf` may exist as a complete linear fallback/supplement, but it does not satisfy an original-layout request by itself.
 - Every `assets/...` link in HTML/Markdown exists.
 - `source_map.json` parses as JSON and includes stable IDs.
 - Important formulas are MathML in HTML and have matching `.mml` files.
 - PDF opens, has expected page count, and rendered previews are not blank or badly overlapped.
 - `coverage_audit.md` exists and explicitly states whether every extractable page/paragraph has a source/translation pair.
-- If the same-layout Chinese PDF omits or compresses text, a complete Chinese-only full text artifact exists; any bilingual comparison artifact is marked as audit-only.
+- If the same-layout Chinese PDF omits or compresses text, a complete Chinese-only full text artifact exists and the limitation is marked; any bilingual comparison artifact is marked as audit-only.

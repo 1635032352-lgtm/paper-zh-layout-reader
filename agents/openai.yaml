@@ -1,7 +1,7 @@
 interface:
   display_name: "Paper Zh Layout Reader"
-  short_description: "英文论文生成中文-only HTML/PDF，并做覆盖复查"
-  default_prompt: "Use $paper-zh-layout-reader to convert this English paper PDF into a Chinese-only final HTML/PDF, keep audit-only source/translation coverage checks, and preserve figures and MathType-compatible formulas."
+  short_description: "英文论文生成中文-only 原版式 HTML/PDF，并做覆盖复查"
+  default_prompt: "Use $paper-zh-layout-reader to convert this English paper PDF into a Chinese-only original-layout final HTML/PDF, keep audit-only source/translation coverage checks, and preserve figures, tables, and MathType-compatible formulas."
 
 policy:
   allow_implicit_invocation: true

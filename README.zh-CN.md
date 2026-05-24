@@ -11,8 +11,10 @@
 对每篇论文，这个 skill 目标生成：
 
 - `paper.md`：用于复查的全文中英文来源对照记录
-- `paper_zh_full.html`：中文-only 完整最终论文
-- `paper_zh_full.pdf`：由中文-only 完整 HTML 打印得到的 PDF
+- `paper_zh_final_layout.html`：中文-only 原论文版式最终论文
+- `paper_zh_final_layout.pdf`：由中文-only 原论文版式 HTML 打印得到的最终 PDF
+- `paper_zh_full.html`：中文-only 完整线性阅读版，作为兜底/补充
+- `paper_zh_full.pdf`：由中文-only 完整线性 HTML 打印得到的 PDF
 - `paper_zh_layout.html`：中文翻译同版式 HTML
 - `paper_zh_layout.pdf`：由同版式 HTML 打印得到的 PDF
 - `source_map.json`：稳定来源 ID、页码、图表、公式和置信度记录
@@ -21,7 +23,7 @@
 - `assets/`：提取或裁剪出来的图表资源
 - `assets/equations/*.mml`：可被 MathType 兼容工具打开或复用的 MathML 公式文件
 
-如果需要中英文对照文件，应只把它作为复查产物，例如 `paper_full_bilingual.html/pdf`。最终面向阅读的论文应保持中文-only。
+如果需要中英文对照文件，应只把它作为复查产物，例如 `paper_full_bilingual.html/pdf`。最终面向阅读的论文应保持中文-only，并优先保持原论文排版；线性阅读版不能替代同版式最终版。
 
 ## 适用场景
 
@@ -37,7 +39,7 @@ source IDs, source_map.json, translation_notes.md, and MathType-compatible formu
 
 - IEEE / ACM / Nature 风格的英文学术 PDF
 - 中英文对照论文阅读笔记
-- 按原论文页序组织的中文翻译 HTML/PDF
+- 按原论文页序、双栏/页眉/图表/公式位置组织的中文翻译 HTML/PDF
 - 需要保留图表和图注位置的论文翻译
 - 需要通过 MathML / MathType 兼容源文件保持公式可编辑的论文
 
@@ -95,7 +97,8 @@ python scripts\validate_reader.py --root "D:\论文\paper-reader" --render-previ
 - 确认每个可抽取页面或段落都在 `paper.md` 中有可见的 `Original` / `中文` 对，并在 `source_map.json` 中有稳定来源记录；
 - 渲染原 PDF 和翻译后的 PDF/HTML，检查题名页、方法/公式页、图表页、结果页、参考文献页和末页是否有漏字、截断、重叠、空白页、公式显示异常或图表错位；
 - 把覆盖结论、数量统计、排版问题和低置信内容写入 `coverage_audit.md`；
-- 把任何中英文对照输出标记为 audit-only，并提供 `paper_zh_full.html/pdf` 作为中文-only 最终阅读版本。
+- 把任何中英文对照输出标记为 audit-only，并提供 `paper_zh_final_layout.html/pdf` 作为中文-only 原论文版式最终阅读版本。
+- 如果只能生成 `paper_zh_full.html/pdf` 这种线性阅读版，必须在 `coverage_audit.md` 和 `translation_notes.md` 中标明“原论文版式输出未完成/低置信”，不能把它当作最终同版式论文。
 
 ## 关于公式
 
