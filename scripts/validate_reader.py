@@ -33,6 +33,7 @@ def main() -> None:
     pdf_path = root / args.pdf
     source_map_path = root / "source_map.json"
     notes_path = root / "translation_notes.md"
+    coverage_audit_path = root / "coverage_audit.md"
     paper_md_path = root / "paper.md"
 
     errors: list[str] = []
@@ -62,8 +63,18 @@ def main() -> None:
 
     if not notes_path.exists():
         warnings.append("missing translation_notes.md")
+    if not coverage_audit_path.exists():
+        warnings.append("missing coverage_audit.md")
+        coverage_audit = ""
+    else:
+        coverage_audit = coverage_audit_path.read_text(encoding="utf-8", errors="replace")
+        audit_markers = ("Original", "中文", "coverage", "覆盖", "audit", "审计", "复查")
+        if not any(marker in coverage_audit for marker in audit_markers):
+            warnings.append("coverage_audit.md does not appear to describe text/layout coverage")
+
     if not paper_md_path.exists():
         warnings.append("missing paper.md")
+        md = ""
     else:
         md = paper_md_path.read_text(encoding="utf-8", errors="replace")
         if "**Original:**" not in md or "**中文:**" not in md:
@@ -90,6 +101,11 @@ def main() -> None:
     else:
         warnings.append(f"missing PDF: {pdf_path}")
 
+    blocks = source_map.get("blocks", []) if isinstance(source_map, dict) else []
+    full_page_blocks = [block for block in blocks if isinstance(block, dict) and block.get("type") == "full_page_text"]
+    original_pairs = md.count("**Original:**")
+    chinese_pairs = md.count("**中文:**")
+
     result = {
         "ok": not errors,
         "errors": errors,
@@ -98,7 +114,11 @@ def main() -> None:
         "missing_assets": missing_assets,
         "math_blocks": math_blocks,
         "mml_files": len(mml_files),
-        "source_blocks": len(source_map.get("blocks", [])) if isinstance(source_map, dict) else 0,
+        "source_blocks": len(blocks),
+        "full_page_blocks": len(full_page_blocks),
+        "paper_original_pairs": original_pairs,
+        "paper_chinese_pairs": chinese_pairs,
+        "coverage_audit": coverage_audit_path.exists(),
         "figures": len(source_map.get("figures", [])) if isinstance(source_map, dict) else 0,
         "equations": len(source_map.get("equations", [])) if isinstance(source_map, dict) else 0,
         "pdf_pages": pdf_pages,

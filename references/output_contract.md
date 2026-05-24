@@ -7,8 +7,11 @@
 ├── paper.md
 ├── paper_zh_layout.html
 ├── paper_zh_layout.pdf
+├── paper_full_bilingual.html   # when full bilingual text does not fit same-layout pages
+├── paper_full_bilingual.pdf    # when full bilingual text does not fit same-layout pages
 ├── source_map.json
 ├── translation_notes.md
+├── coverage_audit.md
 ├── source.pdf
 └── assets/
     ├── fig1.png
@@ -88,6 +91,19 @@ Record:
 - whether the PDF is final or draft
 - validation results
 
+## `coverage_audit.md`
+
+Record the final source-to-output review:
+
+- whether the output is final or draft
+- source PDF page count and translated PDF page count(s)
+- source text coverage by page or paragraph
+- number of visible `Original`/`中文` pairs in `paper.md`
+- whether references, captions, tables, author metadata, page headers/footers, and licensing/download notices were translated or intentionally excluded
+- layout review findings from rendered previews of the original and translated outputs
+- missing, clipped, overlapping, low-confidence, or OCR-corrupted content
+- whether a separate `paper_full_bilingual.html/pdf` was generated for full text comparison
+
 ## Validation Checklist
 
 - `paper.md` contains visible `**Original:**` and `**中文:**` pairs unless the user asked only for Chinese layout.
@@ -95,3 +111,5 @@ Record:
 - `source_map.json` parses as JSON and includes stable IDs.
 - Important formulas are MathML in HTML and have matching `.mml` files.
 - PDF opens, has expected page count, and rendered previews are not blank or badly overlapped.
+- `coverage_audit.md` exists and explicitly states whether every extractable page/paragraph has a source/translation pair.
+- If the same-layout Chinese PDF omits or compresses text, a complete bilingual comparison artifact exists or the omission is clearly marked as draft/low confidence.

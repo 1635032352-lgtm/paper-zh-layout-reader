@@ -15,8 +15,11 @@ For each paper, the skill aims to generate:
 - `paper_zh_layout.pdf` — PDF printed from the layout HTML
 - `source_map.json` — stable source IDs, page numbers, figures, tables, equations, confidence notes
 - `translation_notes.md` — OCR, crop, equation, and low-confidence notes
+- `coverage_audit.md` — final source-vs-translation text/layout review
 - `assets/` — extracted or cropped figures and tables
 - `assets/equations/*.mml` — MathML files that can be opened or reused by MathType-compatible tools
+
+When the Chinese same-layout PDF cannot also carry full bilingual text cleanly, the skill should keep `paper_zh_layout.html/pdf` as the Chinese layout version and add `paper_full_bilingual.html/pdf` for complete original/translation comparison.
 
 ## When To Use
 
@@ -81,7 +84,16 @@ Validate a generated reader folder:
 python scripts\validate_reader.py --root "D:\论文\paper-reader" --render-previews
 ```
 
-The scripts expect Python packages such as `pypdf`, and optionally `pypdfium2` for page rendering and PDF preview validation.
+The validation step checks links, JSON, MathML counts, PDF previews, and whether a `coverage_audit.md` review exists. The scripts expect Python packages such as `pypdf`, and optionally `pypdfium2` for page rendering and PDF preview validation.
+
+## Final Coverage Audit
+
+Before a run is marked complete, compare the source PDF with the generated Chinese artifacts:
+
+- confirm every extractable page or paragraph has a visible `Original` / `中文` pair in `paper.md` and a stable entry in `source_map.json`;
+- render the original PDF and translated PDFs/HTML, then inspect title, method/equation, figure/table, results, references, and final pages for missing text, clipping, overlap, blank pages, or formula rendering problems;
+- document the verdict, counts, layout findings, and any low-confidence content in `coverage_audit.md`;
+- if the same-layout Chinese PDF compresses text, generate a separate `paper_full_bilingual.html/pdf` for full comparison.
 
 ## Notes On Equations
 

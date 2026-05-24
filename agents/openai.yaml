@@ -1,7 +1,7 @@
 interface:
   display_name: "Paper Zh Layout Reader"
-  short_description: "英文论文生成中文对照版 HTML/PDF"
-  default_prompt: "Use $paper-zh-layout-reader to convert this English paper PDF into Chinese Markdown plus same-layout HTML/PDF."
+  short_description: "英文论文生成中文对照版 HTML/PDF，并做覆盖复查"
+  default_prompt: "Use $paper-zh-layout-reader to convert this English paper PDF into Chinese Markdown plus same-layout HTML/PDF, then audit source-vs-translation text and layout coverage."
 
 policy:
   allow_implicit_invocation: true

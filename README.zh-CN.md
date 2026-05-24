@@ -15,8 +15,11 @@
 - `paper_zh_layout.pdf`：由同版式 HTML 打印得到的 PDF
 - `source_map.json`：稳定来源 ID、页码、图表、公式和置信度记录
 - `translation_notes.md`：OCR、图表裁剪、公式重建和低置信内容说明
+- `coverage_audit.md`：最终“原论文 vs 翻译论文”的文字覆盖和排版复查
 - `assets/`：提取或裁剪出来的图表资源
 - `assets/equations/*.mml`：可被 MathType 兼容工具打开或复用的 MathML 公式文件
+
+如果中文同版式 PDF 无法同时承载完整中英文对照而不溢出，skill 应保留 `paper_zh_layout.html/pdf` 作为中文同版式版本，并额外生成 `paper_full_bilingual.html/pdf` 用于完整原文/译文对照。
 
 ## 适用场景
 
@@ -81,7 +84,16 @@ python scripts\probe_pdf.py --pdf "C:\path\paper.pdf" --out "D:\论文\paper-pro
 python scripts\validate_reader.py --root "D:\论文\paper-reader" --render-previews
 ```
 
-这些脚本需要 Python 包，例如 `pypdf`；如果要渲染页面或验证 PDF 预览，还可安装 `pypdfium2`。
+验证步骤会检查资源链接、JSON、MathML 数量、PDF 预览，以及是否存在 `coverage_audit.md` 复查记录。这些脚本需要 Python 包，例如 `pypdf`；如果要渲染页面或验证 PDF 预览，还可安装 `pypdfium2`。
+
+## 最终覆盖复查
+
+在声明完成前，需要把原 PDF 与生成的中文产物逐项对照：
+
+- 确认每个可抽取页面或段落都在 `paper.md` 中有可见的 `Original` / `中文` 对，并在 `source_map.json` 中有稳定来源记录；
+- 渲染原 PDF 和翻译后的 PDF/HTML，检查题名页、方法/公式页、图表页、结果页、参考文献页和末页是否有漏字、截断、重叠、空白页、公式显示异常或图表错位；
+- 把覆盖结论、数量统计、排版问题和低置信内容写入 `coverage_audit.md`；
+- 如果中文同版式 PDF 为了保持版式压缩了文字，应额外生成 `paper_full_bilingual.html/pdf` 作为完整对照版本。
 
 ## 关于公式
 

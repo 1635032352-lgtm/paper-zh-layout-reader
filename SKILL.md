@@ -23,6 +23,7 @@ Always produce at least:
 - `paper_zh_layout.pdf` when Chrome/headless browser printing is available
 - `source_map.json`
 - `translation_notes.md`
+- `coverage_audit.md`
 - `assets\`
 - `assets\equations\*.mml` for equations that are reproduced or rebuilt
 
@@ -66,10 +67,18 @@ For exact field expectations and validation checklist, read `references/output_c
    - Prefer readable Chinese layout over pixel-perfect copying.
    - Print HTML to PDF with Chrome headless when available.
 
-7. **Validate before finishing.**
+7. **Validate the generated files.**
    - Use `scripts/validate_reader.py --root <output-dir> --render-previews` when possible.
    - Check: JSON parses, image links exist, `.mml` count matches equation records, PDF page count is reasonable, rendered previews are nonblank and not badly overlapped.
    - Record missing/low-confidence items in `translation_notes.md`.
+
+8. **Audit source-to-translation coverage before claiming completion.**
+   - Compare the original PDF text, page previews, figures, tables, captions, equations, references, page headers/footers, and author/metadata text against the generated Chinese artifacts.
+   - Confirm that `paper.md` and `source_map.json` contain visible `**Original:**` / `**中文:**` pairs for every extractable page or paragraph. Prefer paragraph-level stable IDs; if a same-layout request makes paragraph-level HTML impractical, add full-page stable IDs such as `P01-FULL` and explicitly note that the IDs are page-level.
+   - Render both the original PDF and translated HTML/PDF previews. Inspect representative title, method/equation, figure/table, results, references, and final pages for missing text, blank pages, clipped text, formula rendering failures, overlapping layout, or misplaced figures.
+   - Write `coverage_audit.md` with: coverage verdict, source-vs-translation text counts or block counts, pages/sections checked, layout findings, missing or low-confidence content, and whether the output is final or draft.
+   - If the Chinese same-layout PDF cannot carry full bilingual text without overflow, keep `paper_zh_layout.html/pdf` as the Chinese layout surface and additionally generate `paper_full_bilingual.html/pdf` for complete source/translation comparison.
+   - Do not say the output is complete unless this audit passes. If it does not pass, deliver the usable draft and make the gaps explicit in both `coverage_audit.md` and `translation_notes.md`.
 
 ## User Preference Defaults
 
