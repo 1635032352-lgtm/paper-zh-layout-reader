@@ -6,7 +6,7 @@ For HTML/PDF outputs, use MathML as the MathType-compatible equation source.
 
 Do:
 
-- Embed MathML directly in `paper_zh_layout.html`.
+- Embed MathML directly in `paper_zh_final_layout.html`.
 - Save the same MathML as `assets/equations/<equation-id>.mml`.
 - Include a TeX annotation when practical:
 

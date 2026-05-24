@@ -2,28 +2,24 @@
 
 [English](README.md) | 中文说明
 
-`paper-zh-layout-reader` 是一个 Codex skill，用于把英文论文 PDF 转换成中文阅读产物。
+`paper-zh-layout-reader` 是一个 Codex skill，用于把英文论文 PDF 转换成中文-only、尽量保持原论文排版的 HTML/PDF。
 
-它面向一个很实际的论文阅读流程：读一篇英文论文，保留来源可追溯性，提取图表，重建重要公式，并生成中文-only 的最终论文版本。中英文对照材料只用于覆盖复查，不作为默认最终阅读版。
+它面向一个固定偏好的论文阅读流程：最终只把 `paper_zh_final_layout.html/pdf` 当成阅读论文；中英文对照、线性全文、来源映射和审计文件只用于复查缺漏，不作为最终交付形式。
 
 ## 产出内容
 
 对每篇论文，这个 skill 目标生成：
 
-- `paper.md`：用于复查的全文中英文来源对照记录
 - `paper_zh_final_layout.html`：中文-only 原论文版式最终论文
 - `paper_zh_final_layout.pdf`：由中文-only 原论文版式 HTML 打印得到的最终 PDF
-- `paper_zh_full.html`：中文-only 完整线性阅读版，作为兜底/补充
-- `paper_zh_full.pdf`：由中文-only 完整线性 HTML 打印得到的 PDF
-- `paper_zh_layout.html`：中文翻译同版式 HTML
-- `paper_zh_layout.pdf`：由同版式 HTML 打印得到的 PDF
+- `paper.md`：用于复查的全文中英文来源对照记录，不是最终阅读版
 - `source_map.json`：稳定来源 ID、页码、图表、公式和置信度记录
 - `translation_notes.md`：OCR、图表裁剪、公式重建和低置信内容说明
 - `coverage_audit.md`：最终“原论文 vs 翻译论文”的文字覆盖和排版复查
 - `assets/`：提取或裁剪出来的图表资源
 - `assets/equations/*.mml`：可被 MathType 兼容工具打开或复用的 MathML 公式文件
 
-如果需要中英文对照文件，应只把它作为复查产物，例如 `paper_full_bilingual.html/pdf`。最终面向阅读的论文应保持中文-only，并优先保持原论文排版；线性阅读版不能替代同版式最终版。
+如果需要中英文对照文件，应只把它作为复查产物，例如 `paper_full_bilingual.html/pdf`。如果因为 PDF 太难只能生成 `paper_zh_full.html/pdf` 线性版，也必须标成兜底草稿，不能替代 `paper_zh_final_layout.html/pdf`。
 
 ## 适用场景
 
@@ -31,14 +27,14 @@
 
 ```text
 Use $paper-zh-layout-reader to translate this English paper PDF into Chinese.
-Generate the Chinese same-layout HTML/PDF, keep figures, captions, page numbers,
-source IDs, source_map.json, translation_notes.md, and MathType-compatible formulas.
+Generate the Chinese-only original-layout HTML/PDF as the final paper, keep figures,
+captions, page numbers, source_map.json, translation_notes.md, coverage_audit.md,
+and MathType-compatible formulas.
 ```
 
 它特别适合：
 
 - IEEE / ACM / Nature 风格的英文学术 PDF
-- 中英文对照论文阅读笔记
 - 按原论文页序、双栏/页眉/图表/公式位置组织的中文翻译 HTML/PDF
 - 需要保留图表和图注位置的论文翻译
 - 需要通过 MathML / MathType 兼容源文件保持公式可编辑的论文
@@ -88,7 +84,7 @@ python scripts\probe_pdf.py --pdf "C:\path\paper.pdf" --out "D:\论文\paper-pro
 python scripts\validate_reader.py --root "D:\论文\paper-reader" --render-previews
 ```
 
-验证步骤会检查资源链接、JSON、MathML 数量、PDF 预览，以及是否存在 `coverage_audit.md` 复查记录。这些脚本需要 Python 包，例如 `pypdf`；如果要渲染页面或验证 PDF 预览，还可安装 `pypdfium2`。
+验证步骤默认检查 `paper_zh_final_layout.html/pdf`，并核对资源链接、JSON、MathML 数量、PDF 预览，以及是否存在 `coverage_audit.md` 复查记录。这些脚本需要 Python 包，例如 `pypdf`；如果要渲染页面或验证 PDF 预览，还可安装 `pypdfium2`。
 
 ## 最终覆盖复查
 
@@ -97,14 +93,14 @@ python scripts\validate_reader.py --root "D:\论文\paper-reader" --render-previ
 - 确认每个可抽取页面或段落都在 `paper.md` 中有可见的 `Original` / `中文` 对，并在 `source_map.json` 中有稳定来源记录；
 - 渲染原 PDF 和翻译后的 PDF/HTML，检查题名页、方法/公式页、图表页、结果页、参考文献页和末页是否有漏字、截断、重叠、空白页、公式显示异常或图表错位；
 - 把覆盖结论、数量统计、排版问题和低置信内容写入 `coverage_audit.md`；
-- 把任何中英文对照输出标记为 audit-only，并提供 `paper_zh_final_layout.html/pdf` 作为中文-only 原论文版式最终阅读版本。
-- 如果只能生成 `paper_zh_full.html/pdf` 这种线性阅读版，必须在 `coverage_audit.md` 和 `translation_notes.md` 中标明“原论文版式输出未完成/低置信”，不能把它当作最终同版式论文。
+- 把任何中英文对照或线性输出标记为 audit-only/fallback-only，并提供 `paper_zh_final_layout.html/pdf` 作为中文-only 原论文版式最终阅读版本。
+- 如果只能生成线性阅读版，必须在 `coverage_audit.md` 和 `translation_notes.md` 中标明“原论文版式输出未完成/低置信”，不能把它当作最终同版式论文。
 
 ## 关于公式
 
 HTML/PDF 不能直接包含原生 MathType OLE 对象。这个 skill 使用 MathML 作为可互操作的公式源格式：
 
-- MathML 会内嵌在 `paper_zh_layout.html` 中。
+- MathML 会内嵌在 `paper_zh_final_layout.html` 中。
 - 对应的 `.mml` 文件会保存到 `assets/equations/`。
 - 条件允许时，会在 MathML 中附带 TeX annotation。
 
