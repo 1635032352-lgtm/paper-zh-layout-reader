@@ -9,8 +9,9 @@ description: Use when converting an English academic paper PDF into Chinese full
 
 Turn a user-provided English academic paper PDF into a complete Chinese reading package, with two preferred surfaces:
 
-- `paper.md`: complete Chinese-English paragraph-aligned reader with page numbers and stable block IDs.
+- `paper_zh_full.html` and `paper_zh_full.pdf`: complete Chinese-only final reading version. This is the default user-facing paper.
 - `paper_zh_layout.html` and `paper_zh_layout.pdf`: Chinese translated version that follows the original paper's page order and layout as closely as practical.
+- `paper.md` and/or audit-only bilingual artifacts: source-grounded original/Chinese pairs used to check omissions, not the default final reading surface.
 
 Default output folder: `D:\论文\<paper-slug>-reader\`, unless the user specifies another path.
 
@@ -19,6 +20,8 @@ Default output folder: `D:\论文\<paper-slug>-reader\`, unless the user specifi
 Always produce at least:
 
 - `paper.md`
+- `paper_zh_full.html`
+- `paper_zh_full.pdf` when Chrome/headless browser printing is available
 - `paper_zh_layout.html`
 - `paper_zh_layout.pdf` when Chrome/headless browser printing is available
 - `source_map.json`
@@ -77,7 +80,7 @@ For exact field expectations and validation checklist, read `references/output_c
    - Confirm that `paper.md` and `source_map.json` contain visible `**Original:**` / `**中文:**` pairs for every extractable page or paragraph. Prefer paragraph-level stable IDs; if a same-layout request makes paragraph-level HTML impractical, add full-page stable IDs such as `P01-FULL` and explicitly note that the IDs are page-level.
    - Render both the original PDF and translated HTML/PDF previews. Inspect representative title, method/equation, figure/table, results, references, and final pages for missing text, blank pages, clipped text, formula rendering failures, overlapping layout, or misplaced figures.
    - Write `coverage_audit.md` with: coverage verdict, source-vs-translation text counts or block counts, pages/sections checked, layout findings, missing or low-confidence content, and whether the output is final or draft.
-   - If the Chinese same-layout PDF cannot carry full bilingual text without overflow, keep `paper_zh_layout.html/pdf` as the Chinese layout surface and additionally generate `paper_full_bilingual.html/pdf` for complete source/translation comparison.
+   - The final reading PDF/HTML should be Chinese-only. If a side-by-side or full-page bilingual artifact is useful for checking omissions, generate it as an audit artifact such as `paper_full_bilingual.html/pdf`, and clearly mark it as not the final user-facing paper.
    - Do not say the output is complete unless this audit passes. If it does not pass, deliver the usable draft and make the gaps explicit in both `coverage_audit.md` and `translation_notes.md`.
 
 ## User Preference Defaults
@@ -85,7 +88,7 @@ For exact field expectations and validation checklist, read `references/output_c
 - Respond in Chinese.
 - Use Windows/PowerShell paths and commands by default.
 - Keep the chat final answer short; link the generated local files and report validation status.
-- If the user asks for “中文版本的 html/pdf”, prioritize `paper_zh_layout.html` and `paper_zh_layout.pdf` while still producing the reader support files.
+- If the user asks for “中文版本的 html/pdf”, prioritize Chinese-only final outputs: `paper_zh_full.html`/`paper_zh_full.pdf`; also keep `paper_zh_layout.html`/`paper_zh_layout.pdf` when a same-layout version is feasible.
 - If the user asks for “中英文对照 Markdown”, prioritize complete block-level bilingual `paper.md`.
 - If the PDF is too long, scanned, or has figure/OCR issues, produce a usable draft first and clearly label limitations in `translation_notes.md`.
 

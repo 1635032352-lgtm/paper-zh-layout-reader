@@ -4,13 +4,15 @@
 
 `paper-zh-layout-reader` is a Codex skill for converting English academic paper PDFs into Chinese reading artifacts.
 
-It is designed around a practical workflow: read one paper, preserve source traceability, extract figures/tables, rebuild important equations in a MathType-compatible format, and produce both a bilingual Markdown reader and a Chinese same-layout HTML/PDF version.
+It is designed around a practical workflow: read one paper, preserve source traceability, extract figures/tables, rebuild important equations in a MathType-compatible format, and produce a Chinese-only final paper. Bilingual source/translation artifacts are used for coverage review, not as the default final reading version.
 
 ## What It Produces
 
 For each paper, the skill aims to generate:
 
-- `paper.md` — full-paper Chinese-English paragraph-aligned reader
+- `paper.md` — source-grounded original/Chinese audit record
+- `paper_zh_full.html` — complete Chinese-only final paper
+- `paper_zh_full.pdf` — PDF printed from the Chinese-only final HTML
 - `paper_zh_layout.html` — Chinese translated layout version
 - `paper_zh_layout.pdf` — PDF printed from the layout HTML
 - `source_map.json` — stable source IDs, page numbers, figures, tables, equations, confidence notes
@@ -19,7 +21,7 @@ For each paper, the skill aims to generate:
 - `assets/` — extracted or cropped figures and tables
 - `assets/equations/*.mml` — MathML files that can be opened or reused by MathType-compatible tools
 
-When the Chinese same-layout PDF cannot also carry full bilingual text cleanly, the skill should keep `paper_zh_layout.html/pdf` as the Chinese layout version and add `paper_full_bilingual.html/pdf` for complete original/translation comparison.
+If a side-by-side bilingual file is needed, it should be generated only as an audit artifact such as `paper_full_bilingual.html/pdf`. The final user-facing paper should remain Chinese-only.
 
 ## When To Use
 
@@ -93,7 +95,7 @@ Before a run is marked complete, compare the source PDF with the generated Chine
 - confirm every extractable page or paragraph has a visible `Original` / `中文` pair in `paper.md` and a stable entry in `source_map.json`;
 - render the original PDF and translated PDFs/HTML, then inspect title, method/equation, figure/table, results, references, and final pages for missing text, clipping, overlap, blank pages, or formula rendering problems;
 - document the verdict, counts, layout findings, and any low-confidence content in `coverage_audit.md`;
-- if the same-layout Chinese PDF compresses text, generate a separate `paper_full_bilingual.html/pdf` for full comparison.
+- keep any bilingual comparison output as audit-only, and provide `paper_zh_full.html/pdf` as the Chinese-only final reading version.
 
 ## Notes On Equations
 

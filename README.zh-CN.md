@@ -4,13 +4,15 @@
 
 `paper-zh-layout-reader` 是一个 Codex skill，用于把英文论文 PDF 转换成中文阅读产物。
 
-它面向一个很实际的论文阅读流程：读一篇英文论文，保留来源可追溯性，提取图表，重建重要公式，并同时生成中英文对照 Markdown 阅读版和中文同版式 HTML/PDF 版本。
+它面向一个很实际的论文阅读流程：读一篇英文论文，保留来源可追溯性，提取图表，重建重要公式，并生成中文-only 的最终论文版本。中英文对照材料只用于覆盖复查，不作为默认最终阅读版。
 
 ## 产出内容
 
 对每篇论文，这个 skill 目标生成：
 
-- `paper.md`：全文中英文段落对照阅读版
+- `paper.md`：用于复查的全文中英文来源对照记录
+- `paper_zh_full.html`：中文-only 完整最终论文
+- `paper_zh_full.pdf`：由中文-only 完整 HTML 打印得到的 PDF
 - `paper_zh_layout.html`：中文翻译同版式 HTML
 - `paper_zh_layout.pdf`：由同版式 HTML 打印得到的 PDF
 - `source_map.json`：稳定来源 ID、页码、图表、公式和置信度记录
@@ -19,7 +21,7 @@
 - `assets/`：提取或裁剪出来的图表资源
 - `assets/equations/*.mml`：可被 MathType 兼容工具打开或复用的 MathML 公式文件
 
-如果中文同版式 PDF 无法同时承载完整中英文对照而不溢出，skill 应保留 `paper_zh_layout.html/pdf` 作为中文同版式版本，并额外生成 `paper_full_bilingual.html/pdf` 用于完整原文/译文对照。
+如果需要中英文对照文件，应只把它作为复查产物，例如 `paper_full_bilingual.html/pdf`。最终面向阅读的论文应保持中文-only。
 
 ## 适用场景
 
@@ -93,7 +95,7 @@ python scripts\validate_reader.py --root "D:\论文\paper-reader" --render-previ
 - 确认每个可抽取页面或段落都在 `paper.md` 中有可见的 `Original` / `中文` 对，并在 `source_map.json` 中有稳定来源记录；
 - 渲染原 PDF 和翻译后的 PDF/HTML，检查题名页、方法/公式页、图表页、结果页、参考文献页和末页是否有漏字、截断、重叠、空白页、公式显示异常或图表错位；
 - 把覆盖结论、数量统计、排版问题和低置信内容写入 `coverage_audit.md`；
-- 如果中文同版式 PDF 为了保持版式压缩了文字，应额外生成 `paper_full_bilingual.html/pdf` 作为完整对照版本。
+- 把任何中英文对照输出标记为 audit-only，并提供 `paper_zh_full.html/pdf` 作为中文-only 最终阅读版本。
 
 ## 关于公式
 

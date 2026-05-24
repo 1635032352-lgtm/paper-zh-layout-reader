@@ -31,6 +31,8 @@ def main() -> None:
     root = Path(args.root)
     html_path = root / args.html
     pdf_path = root / args.pdf
+    chinese_full_html_path = root / "paper_zh_full.html"
+    chinese_full_pdf_path = root / "paper_zh_full.pdf"
     source_map_path = root / "source_map.json"
     notes_path = root / "translation_notes.md"
     coverage_audit_path = root / "coverage_audit.md"
@@ -44,6 +46,13 @@ def main() -> None:
         html = ""
     else:
         html = html_path.read_text(encoding="utf-8", errors="replace")
+
+    chinese_full_html = chinese_full_html_path.exists()
+    chinese_full_pdf = chinese_full_pdf_path.exists()
+    if not chinese_full_html:
+        warnings.append("missing paper_zh_full.html; Chinese-only final paper not found")
+    if not chinese_full_pdf:
+        warnings.append("missing paper_zh_full.pdf; Chinese-only final PDF not found")
 
     asset_links = re.findall(r'(?:src|href)="([^"]+)"', html)
     asset_links = [link for link in asset_links if link.startswith("assets/")]
@@ -119,6 +128,8 @@ def main() -> None:
         "paper_original_pairs": original_pairs,
         "paper_chinese_pairs": chinese_pairs,
         "coverage_audit": coverage_audit_path.exists(),
+        "chinese_full_html": chinese_full_html,
+        "chinese_full_pdf": chinese_full_pdf,
         "figures": len(source_map.get("figures", [])) if isinstance(source_map, dict) else 0,
         "equations": len(source_map.get("equations", [])) if isinstance(source_map, dict) else 0,
         "pdf_pages": pdf_pages,

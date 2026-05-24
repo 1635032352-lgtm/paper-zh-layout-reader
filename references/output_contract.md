@@ -5,10 +5,12 @@
 ```text
 <paper-slug>-reader/
 ├── paper.md
+├── paper_zh_full.html
+├── paper_zh_full.pdf
 ├── paper_zh_layout.html
 ├── paper_zh_layout.pdf
-├── paper_full_bilingual.html   # when full bilingual text does not fit same-layout pages
-├── paper_full_bilingual.pdf    # when full bilingual text does not fit same-layout pages
+├── paper_full_bilingual.html   # optional audit artifact, not final reading surface
+├── paper_full_bilingual.pdf    # optional audit artifact, not final reading surface
 ├── source_map.json
 ├── translation_notes.md
 ├── coverage_audit.md
@@ -22,6 +24,8 @@
 ```
 
 ## `paper.md`
+
+`paper.md` may contain source-grounded bilingual pairs for coverage review. It is not necessarily the final user-facing paper when the user asked for a Chinese-only version.
 
 Use this shape for body blocks:
 
@@ -90,6 +94,7 @@ Record:
 - skipped or low-confidence material
 - whether the PDF is final or draft
 - validation results
+- which artifact is the final Chinese-only reading version
 
 ## `coverage_audit.md`
 
@@ -103,13 +108,15 @@ Record the final source-to-output review:
 - layout review findings from rendered previews of the original and translated outputs
 - missing, clipped, overlapping, low-confidence, or OCR-corrupted content
 - whether a separate `paper_full_bilingual.html/pdf` was generated for full text comparison
+- confirmation that side-by-side bilingual artifacts are audit/support files, not the final user-facing Chinese paper
 
 ## Validation Checklist
 
 - `paper.md` contains visible `**Original:**` and `**中文:**` pairs unless the user asked only for Chinese layout.
+- `paper_zh_full.html/pdf` exists for Chinese-only final reading when the user asks for a Chinese paper.
 - Every `assets/...` link in HTML/Markdown exists.
 - `source_map.json` parses as JSON and includes stable IDs.
 - Important formulas are MathML in HTML and have matching `.mml` files.
 - PDF opens, has expected page count, and rendered previews are not blank or badly overlapped.
 - `coverage_audit.md` exists and explicitly states whether every extractable page/paragraph has a source/translation pair.
-- If the same-layout Chinese PDF omits or compresses text, a complete bilingual comparison artifact exists or the omission is clearly marked as draft/low confidence.
+- If the same-layout Chinese PDF omits or compresses text, a complete Chinese-only full text artifact exists; any bilingual comparison artifact is marked as audit-only.
